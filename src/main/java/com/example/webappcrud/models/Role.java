@@ -15,7 +15,6 @@ public class Role implements GrantedAuthority {
 
     @Id
     @Column(name = "id")
-    @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

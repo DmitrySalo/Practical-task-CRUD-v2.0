@@ -22,7 +22,6 @@ public class User implements UserDetails {
 
     @Id
     @Column(name = "id")
-    @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

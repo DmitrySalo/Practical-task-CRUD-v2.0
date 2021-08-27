@@ -59,7 +59,7 @@ public class AdminController {
         }
 
         setRolesIf(user, ADMIN, USER);
-        service.createPerson(user);
+        service.createUser(user);
         return "redirect:/admin";
     }
 
@@ -101,7 +101,7 @@ public class AdminController {
         }
 
         setRolesIf(user, ADMIN, USER);
-        service.updatePerson(user);
+        service.updateUser(user);
         return "redirect:/admin";
     }
 

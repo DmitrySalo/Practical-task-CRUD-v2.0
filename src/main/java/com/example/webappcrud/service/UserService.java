@@ -11,9 +11,13 @@ public interface UserService {
 
     User showById(int id);
 
-    void createPerson(User user);
+    User showByLogin(String login);
 
-    void updatePerson(User user);
+    Role showRoleByName(String roleName);
+
+    void createUser(User user);
+
+    void updateUser(User user);
 
     void deleteById(int id);
 

@@ -40,7 +40,7 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public User getUserByName(String login) {
+    public User showByLogin(String login) {
         User user;
 
         try {
@@ -53,6 +53,14 @@ public class UserDaoImp implements UserDao {
         }
 
         return user;
+    }
+
+    @Override
+    public Role showRoleByName(String roleName) {
+        return entityManager
+                .createQuery("select role from Role role where role.role=:role", Role.class)
+                .setParameter("role", roleName)
+                .getSingleResult();
     }
 
     @Override

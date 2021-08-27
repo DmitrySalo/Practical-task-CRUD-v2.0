@@ -11,13 +11,15 @@ public interface UserDao {
 
     User showById(int id);
 
+    User showByLogin(String login);
+
+    Role showRoleByName(String roleName);
+
     void createUser(User user);
 
     void updateUser(User user);
 
     void deleteById(int id);
-
-    User getUserByName(String name);
 
     List<Role> showRoles();
 }

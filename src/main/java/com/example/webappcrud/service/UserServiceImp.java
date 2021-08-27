@@ -29,12 +29,22 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void createPerson(User user) {
+    public User showByLogin(String login) {
+        return userDao.showByLogin(login);
+    }
+
+    @Override
+    public Role showRoleByName(String roleName) {
+        return userDao.showRoleByName(roleName);
+    }
+
+    @Override
+    public void createUser(User user) {
         userDao.createUser(user);
     }
 
     @Override
-    public void updatePerson(User user) {
+    public void updateUser(User user) {
         userDao.updateUser(user);
     }
 
