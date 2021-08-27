@@ -48,7 +48,7 @@ public class AdminController {
         return "admin/new";
     }
 
-    @PostMapping()
+    @PostMapping
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult,
                          @RequestParam(value = "ADMIN", required = false) String ADMIN,
@@ -90,6 +90,7 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
+    @SuppressWarnings("all")
     public String update(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult,
                          @RequestParam(name = "ADMIN", required = false) String ADMIN,

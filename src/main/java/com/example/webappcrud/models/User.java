@@ -1,5 +1,9 @@
 package com.example.webappcrud.models;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,11 +14,15 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
 
     @Id
     @Column(name = "id")
+    @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -50,10 +58,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_ID"))
     private Set<Role> roles;
 
-    public User() {
-    }
-
     public User(String name, int age, String email, String login, String password, Set<Role> roles) {
+        super();
         this.name = name;
         this.age = age;
         this.email = email;
@@ -97,70 +103,15 @@ public class User implements UserDetails {
         return true;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-
-        if (o == null || this.getClass() != o.getClass()) {
+        if ((o == null) || (this.getClass() != o.getClass())) {
             return false;
         }
-
         User user = (User) o;
-
         return id == user.id
                 && age == user.age
                 && name.equals(user.name)
@@ -173,18 +124,5 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return 31 * Objects.hash(id, name, age, email, login, password, roles);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", email='" + email + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + roles +
-                '}';
     }
 }
