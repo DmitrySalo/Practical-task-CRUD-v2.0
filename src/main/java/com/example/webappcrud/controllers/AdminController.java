@@ -27,13 +27,13 @@ public class AdminController {
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("admin", service.showAll());
+        model.addAttribute("admin", service.getAllUsers());
         return "admin/admin";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        Optional<User> userOptional = Optional.ofNullable((service.showById(id)));
+        Optional<User> userOptional = Optional.ofNullable((service.getUserById(id)));
 
         if (userOptional.isPresent()) {
             model.addAttribute("user", userOptional.get());
@@ -85,7 +85,7 @@ public class AdminController {
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", service.showById(id));
+        model.addAttribute("user", service.getUserById(id));
         return "admin/edit";
     }
 
@@ -107,7 +107,7 @@ public class AdminController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        service.deleteById(id);
+        service.deleteUserById(id);
         return "redirect:/admin";
     }
 }

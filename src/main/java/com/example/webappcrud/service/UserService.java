@@ -7,19 +7,19 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> showAll();
+    List<User> getAllUsers();
 
-    User showById(int id);
+    User getUserById(int id);
 
-    User showByLogin(String login);
+    User getUserByLogin(String login);
 
-    Role showRoleByName(String roleName);
+    Role getRoleByName(String roleName);
 
     void createUser(User user);
 
     void updateUser(User user);
 
-    void deleteById(int id);
+    void deleteUserById(int id);
 
-    List<Role> showRoles();
+    List<Role> getAllRoles();
 }

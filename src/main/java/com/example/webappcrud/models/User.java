@@ -1,6 +1,5 @@
 package com.example.webappcrud.models;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -100,6 +99,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getRolesNames() {
+        return getRoles().toString().replaceAll("[\\p{Punct}&&[^,]]+", "");
     }
 
     @Override
