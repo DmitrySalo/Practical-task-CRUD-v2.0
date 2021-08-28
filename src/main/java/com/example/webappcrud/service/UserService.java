@@ -13,7 +13,7 @@ public interface UserService {
 
     User showByLogin(String login);
 
-    Role showRoleByName(String roleName);
+    //Role showRoleByName(String roleName);
 
     void createUser(User user);
 
@@ -21,5 +21,5 @@ public interface UserService {
 
     void deleteById(int id);
 
-    List<Role> showRoles();
+    //List<Role> showRoles();
 }

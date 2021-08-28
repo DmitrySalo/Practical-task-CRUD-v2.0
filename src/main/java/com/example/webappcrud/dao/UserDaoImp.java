@@ -10,10 +10,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Repository
+//@Repository
 public class UserDaoImp implements UserDao {
 
-    @PersistenceContext
+    //@PersistenceContext
     private EntityManager entityManager;
 
     @Override
