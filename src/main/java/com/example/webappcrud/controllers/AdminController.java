@@ -4,6 +4,7 @@ import com.example.webappcrud.models.Role;
 import com.example.webappcrud.models.User;
 import com.example.webappcrud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,9 +26,10 @@ public class AdminController {
         this.service = service;
     }
 
-    @GetMapping()
-    public String index(Model model) {
+    @GetMapping
+    public String adminPage(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("admin", service.getAllUsers());
+        model.addAttribute("user", user);
         return "admin/admin";
     }
 
@@ -44,21 +46,29 @@ public class AdminController {
     }
 
     @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user) {
+    public String newUser(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
         return "admin/new";
     }
 
     @PostMapping
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult,
-                         @RequestParam(value = "ADMIN", required = false) String ADMIN,
-                         @RequestParam(value = "USER", required = false) String USER) {
+                         /*@RequestParam(value = "ADMIN", required = false) String ADMIN,
+                         @RequestParam(value = "USER", required = false) String USER*/
+                         @RequestParam(required = false, name = "roles") String[] roles) {
 
         if (bindingResult.hasErrors()) {
             return "admin/new";
         }
 
-        setRolesIf(user, ADMIN, USER);
+        Set<Role> userRoles = new HashSet<>();
+        for (String role : roles) {
+            userRoles.add(service.getRoleByName(role));
+        }
+
+        user.setRoles(userRoles);
+        //setRolesIf(user, ADMIN, USER);
         service.createUser(user);
         return "redirect:/admin";
     }
@@ -93,14 +103,21 @@ public class AdminController {
     @SuppressWarnings("all")
     public String update(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult,
-                         @RequestParam(name = "ADMIN", required = false) String ADMIN,
-                         @RequestParam(name = "USER", required = false) String USER) {
+                         /*@RequestParam(name = "ADMIN", required = false) String ADMIN,
+                         @RequestParam(name = "USER", required = false) String USER*/
+                         @RequestParam(required = false, name = "roles") String[] roles) {
 
         if (bindingResult.hasErrors()) {
             return "admin/edit";
         }
 
-        setRolesIf(user, ADMIN, USER);
+        Set<Role> userRoles = new HashSet<>();
+        for (String role : roles) {
+            userRoles.add(service.getRoleByName(role));
+        }
+
+        user.setRoles(userRoles);
+        //setRolesIf(user, ADMIN, USER);
         service.updateUser(user);
         return "redirect:/admin";
     }

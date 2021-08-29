@@ -22,7 +22,7 @@ public class WebAppCrudApplication {
     @EventListener({ApplicationReadyEvent.class})
     public void applicationReadyEvent() {
         log.info("Application was started... Launching browser page...");
-        browse("http://localhost:8080/login");
+        browse("http://localhost:8080/default/login");
     }
 
     public static void browse(String url) {
