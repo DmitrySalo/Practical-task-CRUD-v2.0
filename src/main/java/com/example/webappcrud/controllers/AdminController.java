@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
-
     private final UserService service;
 
     /*@Autowired
@@ -39,7 +38,7 @@ public class AdminController {
         return "admin/admin";
     }
 
-    /*@GetMapping("/{id}")
+    @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         Optional<User> userOptional = Optional.ofNullable((service.getUserById(id)));
 
@@ -49,7 +48,7 @@ public class AdminController {
         }
 
         return "errors/not_found";
-    }*/
+    }
 
     @GetMapping("/new")
     public String newUser(@AuthenticationPrincipal User user, Model model) {
@@ -95,11 +94,11 @@ public class AdminController {
         user.setRoles(newRoles);
     }*/
 
-    /*@GetMapping("/{id}")
+    @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", service.getUserById(id));
         return "admin/edit";
-    }*/
+    }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") @Valid User user,

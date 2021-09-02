@@ -17,7 +17,6 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-
     private final UserDetailsService service;
 
     /*@Autowired

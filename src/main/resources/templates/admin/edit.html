@@ -68,13 +68,23 @@
                 <br/>
 
                 <label>
-                    <input th:type="checkbox" th:id="1" th:name="ADMIN" th:value="ADMIN">
+                    <input th:id="1"
+                           th:name="currentRoles"
+                           th:value="ROLE_ADMIN"
+                           th:checked="${user.getRolesNames().contains('ADMIN')}"
+                           th:type="checkbox"
+                           id="edit_ADMIN">
                 </label>
-                <label th:for="ADMIN">Admin</label>
+                <label for="edit_ADMIN">Admin</label>
                 <label>
-                    <input th:type="checkbox" th:id="2" th:name="USER" th:value="USER">
+                    <input th:id="2"
+                           th:name="currentRoles"
+                           th:value="ROLE_USER"
+                           th:checked="${user.getRolesNames().contains('USER')}"
+                           th:type="checkbox"
+                           id="edit_USER">
                 </label>
-                <label th:for="USER">User</label>
+                <label for="edit_USER">User</label>
             </td>
         </table>
 
