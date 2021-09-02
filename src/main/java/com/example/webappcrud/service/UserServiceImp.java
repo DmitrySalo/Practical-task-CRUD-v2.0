@@ -6,6 +6,8 @@ import com.example.webappcrud.dao.UserRepository;
 import com.example.webappcrud.models.Role;
 import com.example.webappcrud.models.User;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class UserServiceImp implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    final PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUsers() {
@@ -51,14 +54,14 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void createUser(User user) {
-        user.setPassword(SecurityConfig.passwordEncoder().encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
     @Override
     public void updateUser(User user) {
         if (!user.getPassword().equals(getUserById(user.getId()).getPassword())) {
-            user.setPassword(SecurityConfig.passwordEncoder().encode(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userRepository.save(user);
     }

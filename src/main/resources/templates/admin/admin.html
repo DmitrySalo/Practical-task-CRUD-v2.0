@@ -17,7 +17,9 @@
                 <span class="align-middle" th:text="${user.getLogin()}"></span>
             </b>
             <span class="align-middle">with roles:</span>
-            <span class="align-middle" th:text="${user.getRolesNames()}"></span>
+            <span class="align-middle"
+                  th:text="${#strings.replace(#authentication.getPrincipal().authorities,'ROLE_', '')
+                  .replaceAll('[\p{Punct}&&[^,]]+', '')}"></span>
         </p>
         <form th:action="@{/logout}" method="POST">
             <button type="submit" class="btn btn-dark text-secondary">Logout</button>
@@ -28,13 +30,13 @@
 <section>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-2 px-0">
+            <div class="col-2 vh-100">
                 <ul class="list-group-flush px-0 py-2">
                     <a class="list-group-item active">Admin</a>
                     <a class="nav-item nav-link" th:href="@{/user}">User</a>
                 </ul>
             </div>
-            <div class="col-10 px-0">
+            <div class="col-10 vh-100" style="background-color: whitesmoke">
                 <div class="container-fluid">
                     <h1 class="m-3 fw-bold">Admin panel</h1>
                     <div class="tab-content" id="tabContent">
@@ -56,32 +58,33 @@
                                         <th>Age</th>
                                         <th>Email</th>
                                         <th>Login</th>
-                                        <th>Roles</th>
+                                        <th>Role</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
-                                    <tr th:each="user : ${admin}">
+                                    <tr style="background-color: whitesmoke"
+                                        th:each="user : ${users}">
                                         <td th:text="${user.getId()}">ID</td>
                                         <td th:text="${user.getName()}">Name</td>
                                         <td th:text="${user.getAge()}">Age</td>
                                         <td th:text="${user.getEmail()}">Email</td>
                                         <td th:text="${user.getLogin()}">Login</td>
-                                        <td th:text="${user.getRolesNames()}">Roles</td>
+                                        <td th:text="${user.getRolesNames()}">Role</td>
                                         <td>
                                             <a type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
                                                data-bs-target="#editModal"
-                                               th:data-bs-target="${'#editModal'+user.getId()}">
+                                               th:data-bs-target="${'#editModal' + user.getId()}">
                                                 Edit
                                             </a>
                                         </td>
                                         <td>
                                             <a type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                               data-bs-target="#DELETE" th:data-bs-target="${'#DELETE'+user.getId()}">
+                                               data-bs-target="#DELETE" th:data-bs-target="${'#DELETE' + user.getId()}">
                                                 Delete
                                             </a>
                                         </td>
 
-                                        <div class="modal fade" th:id="${'editModal'+user.getId()}"
+                                        <div class="modal fade" th:id="${'editModal' + user.getId()}"
                                              aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" modal-dialog-centered>
                                                 <div class="modal-content">
@@ -89,111 +92,156 @@
                                                         <h5 class="modal-title" id="editModalLabel">
                                                             Edit user
                                                         </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        <button type="button"
+                                                                class="btn-close"
+                                                                data-bs-dismiss="modal"
                                                                 aria-label="Close"></button>
                                                     </div>
                                                     <form th:action="@{/admin/{id}(id=${user.getId()})}"
-                                                          th:object="${user}" th:method="PATCH">
+                                                          th:object="${user}"
+                                                          th:method="PATCH"
+                                                          th:align="center">
                                                         <div class="modal-body col-md text-center">
-                                                            <label for="id">
+                                                            <label for="edit_id">
                                                                 <b>ID</b>
                                                             </label>
-                                                            <input type="number" th:name="*{id}"
-                                                                   id="id" class="form-control"
-                                                                   th:value="${user.getId()}" readonly="true"/>
-                                                            <br/>
+                                                            <input class="form-control mb-4"
+                                                                   type="number"
+                                                                   id="edit_id"
+                                                                   th:name="id"
+                                                                   th:value="${user.getId()}"
+                                                                   disabled/>
 
-                                                            <label for="name">
+                                                            <label for="new_name">
                                                                 <b>Name</b>
                                                             </label>
-                                                            <input type="text" th:name="*{name}"
-                                                                   id="name" class="form-control"
-                                                                   th:value="${user.getName()}"/>
-                                                            <div th:if="${#fields.hasErrors('name')}"
+                                                            <input class="form-control"
+                                                                   type="text"
+                                                                   id="new_name"
+                                                                   placeholder="Name"
+                                                                   th:name="name"
+                                                                   th:value="${user.getName()}"
+                                                                   th:minlength="2" th:maxlength="30"
+                                                                   pattern="[\p{Upper}{1}]+[\p{Lower}]+|[А-ЯЁ{1}]+[а-яё]+"
+                                                                   aria-describedby="nameHelpInline"
+                                                                   autofocus required/>
+                                                            <small id="nameHelpInline" class="text-muted">
+                                                                This field must match the "Name" pattern.
+                                                            </small>
+                                                            <div class="alert alert-warning"
+                                                                 style="font-size: small"
+                                                                 th:if="${#fields.hasErrors('name')}"
                                                                  th:errors="*{name}">Name error
                                                             </div>
                                                             <br/>
 
-                                                            <label for="age">
+                                                            <label for="edit_age">
                                                                 <b>Age</b>
                                                             </label>
-                                                            <input type="number" th:field="*{age}"
-                                                                   id="age" class="form-control"
-                                                                   th:value="${user.getAge()}"/>
-                                                            <div th:if="${#fields.hasErrors('age')}"
-                                                                 th:errors="*{age}">Age error
+                                                            <input class="form-control mb-4"
+                                                                   type="number"
+                                                                   id="edit_age"
+                                                                   placeholder="Age"
+                                                                   th:name="age"
+                                                                   th:value="${user.getAge()}"
+                                                                   th:min="0" th:max="125"
+                                                                   autofocus required/>
+                                                            <div class="alert alert-warning"
+                                                                 style="font-size: small"
+                                                                 th:if="${#fields.hasErrors('age')}"
+                                                                 th:errors="*{age}">
+                                                                Age error
                                                             </div>
-                                                            <br/>
 
-                                                            <label for="email">
+                                                            <label for="edit_email">
                                                                 <b>Email</b>
                                                             </label>
-                                                            <input type="text" th:field="*{email}"
-                                                                   id="email" class="form-control"
-                                                                   th:value="${user.getEmail()}"/>
-                                                            <div th:if="${#fields.hasErrors('email')}"
-                                                                 th:errors="*{email}">Email error
+                                                            <input class="form-control mb-4"
+                                                                   type="text"
+                                                                   id="edit_email"
+                                                                   placeholder="Email"
+                                                                   th:name="email"
+                                                                   th:value="${user.getEmail()}"
+                                                                   autofocus required/>
+                                                            <div class="alert alert-warning"
+                                                                 style="font-size: small"
+                                                                 th:if="${#fields.hasErrors('email')}"
+                                                                 th:errors="*{email}">
+                                                                Email error
                                                             </div>
-                                                            <br/>
 
-                                                            <label for="login">
+                                                            <label for="edit_login">
                                                                 <b>Login</b>
                                                             </label>
-                                                            <input type="text" th:field="*{login}"
-                                                                   id="login" class="form-control"
-                                                                   th:value="${user.getLogin()}"/>
-                                                            <div th:if="${#fields.hasErrors('login')}"
-                                                                 th:errors="*{login}">Login error
+                                                            <input class="form-control mb-4"
+                                                                   type="text"
+                                                                   id="edit_login"
+                                                                   placeholder="Login"
+                                                                   th:name="login"
+                                                                   th:value="${user.getLogin()}"
+                                                                   th:minlength="4" th:maxlength="16"
+                                                                   autofocus required/>
+                                                            <div class="alert alert-warning"
+                                                                 style="font-size: small"
+                                                                 th:if="${#fields.hasErrors('login')}"
+                                                                 th:errors="*{login}">
+                                                                Login error
                                                             </div>
-                                                            <br/>
 
-                                                            <label for="password">
+                                                            <label for="edit_password">
                                                                 <b>Password</b>
                                                             </label>
-                                                            <div class="password">
-                                                                <input type="password" th:field="*{password}"
-                                                                       id="password" class="form-control"
-                                                                       placeholder="Password" required/>
-                                                                <a href="#" class="password-control"></a>
-                                                                <div th:if="${#fields.hasErrors('password')}"
-                                                                     th:errors="*{password}">Password error
-                                                                </div>
+                                                            <input class="form-control mb-4"
+                                                                   type="password"
+                                                                   id="edit_password"
+                                                                   placeholder="Password"
+                                                                   th:name="password"
+                                                                   th:value="${user.getPassword()}"
+                                                                   th:minlength="4" th:maxlength="80"
+                                                                   autofocus required/>
+                                                            <a href="#" class="password-control"></a>
+                                                            <div class="alert alert-warning" style="color: red"
+                                                                 th:if="${#fields.hasErrors('password')}"
+                                                                 th:errors="*{password}">
+                                                                Password error
                                                             </div>
-                                                            <br/>
 
                                                             <label>
                                                                 <b>Roles</b>
                                                             </label>
-                                                            <div class="form-check form-switch" th:align="center">
+                                                            <br/>
+                                                            <div class="form-check form-check-inline">
                                                                 <input class="form-check-input"
                                                                        th:id="1"
-                                                                       th:name="roles"
+                                                                       th:name="currentRoles"
                                                                        th:value="ROLE_ADMIN"
                                                                        th:checked="${user.getRolesNames().contains('ADMIN')}"
                                                                        th:type="checkbox"
-                                                                       id="ADMIN">
+                                                                       id="edit_ADMIN">
                                                                 <label class="form-check-label"
-                                                                       for="ADMIN">Admin</label>
+                                                                       for="edit_ADMIN">Admin</label>
                                                             </div>
-                                                            <div class="form-check form-switch" th:align="center">
-                                                                <input class="form-check-input" required
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input"
                                                                        th:id="2"
-                                                                       th:name="roles"
+                                                                       th:name="currentRoles"
                                                                        th:value="ROLE_USER"
                                                                        th:checked="${user.getRolesNames().contains('USER')}"
                                                                        th:type="checkbox"
-                                                                       id="USER">
-                                                                <label class="form-check-label" for="USER">User</label>
+                                                                       id="edit_USER">
+                                                                <label class="form-check-label mb-4"
+                                                                       for="edit_USER">User</label>
                                                             </div>
-                                                            <br/>
-                                                            <br/>
                                                         </div>
 
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Close
+                                                            <button type="button"
+                                                                    class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">
+                                                                Close
                                                             </button>
-                                                            <button type="submit" class="btn btn-primary">
+                                                            <button type="submit"
+                                                                    class="btn btn-primary">
                                                                 Edit
                                                             </button>
                                                         </div>
@@ -201,72 +249,116 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="modal fade" th:id="${'DELETE'+user.getId()}"
+                                        <div class="modal fade" th:id="${'DELETE' + user.getId()}"
                                              aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
+                                            <div class="modal-dialog" modal-dialog-centered role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">
                                                             Delete user
                                                         </h5>
-                                                        <button type="button" class="btn-close"
+                                                        <button type="button"
+                                                                class="btn-close"
                                                                 data-bs-dismiss="modal"
                                                                 aria-label="Close"></button>
                                                     </div>
-                                                    <form class="modal-body col-md text-center"
-                                                          th:action="@{/admin/{id}(id=${user.getId()})}"
+                                                    <form th:action="@{/admin/{id}(id=${user.getId()})}"
                                                           th:object="${user}"
-                                                          th:method="DELETE">
-                                                        <div class="modal-body col-md">
-                                                            <label for="id1">
+                                                          th:method="DELETE"
+                                                          th:align="center">
+                                                        <div class="modal-body col-md text-center">
+                                                            <label for="del_id">
                                                                 <b>ID</b>
                                                             </label>
-                                                            <input type="number" th:name="*{id}"
-                                                                   id="id1" class="form-control"
-                                                                   th:value="${user.getId()}" disabled/>
+                                                            <input type="number"
+                                                                   th:name="id"
+                                                                   id="del_id"
+                                                                   class="form-control"
+                                                                   th:value="${user.getId()}"
+                                                                   disabled/>
                                                             <br/>
 
-                                                            <label for="name1">
+                                                            <label for="del_name">
                                                                 <b>Name</b>
                                                             </label>
-                                                            <input type="text" th:name="*{name}"
-                                                                   id="name1" class="form-control"
-                                                                   th:value="${user.getName()}" disabled/>
+                                                            <input type="text"
+                                                                   th:name="name"
+                                                                   id="del_name"
+                                                                   class="form-control"
+                                                                   th:value="${user.getName()}"
+                                                                   disabled/>
                                                             <br/>
 
-                                                            <label for="age1">
+                                                            <label for="del_age">
                                                                 <b>Age</b>
                                                             </label>
-                                                            <input type="number" th:field="*{age}"
-                                                                   id="age1" class="form-control"
-                                                                   th:value="${user.getAge()}" disabled/>
+                                                            <input type="number"
+                                                                   th:name="age"
+                                                                   id="del_age"
+                                                                   class="form-control"
+                                                                   th:value="${user.getAge()}"
+                                                                   disabled/>
+                                                            <br/>
+
+                                                            <label for="del_email">
+                                                                <b>Email</b>
+                                                            </label>
+                                                            <input type="email"
+                                                                   th:name="email"
+                                                                   id="del_email"
+                                                                   class="form-control"
+                                                                   th:value="${user.getEmail()}"
+                                                                   disabled/>
+                                                            <br/>
+
+                                                            <label for="del_login">
+                                                                <b>Login</b>
+                                                            </label>
+                                                            <input type="text"
+                                                                   th:name="login"
+                                                                   id="del_login"
+                                                                   class="form-control"
+                                                                   th:value="${user.getLogin()}"
+                                                                   disabled/>
                                                             <br/>
 
                                                             <label>
-                                                                <b>Roles</b>
+                                                                <b>Role</b>
                                                             </label>
-                                                            <div class="form-check form-switch" th:align="left">
-                                                                <input class="form-check-input" th:name="ADMIN1"
-                                                                       value="ADMIN1" th:type="checkbox"
-                                                                       id="ADMIN1" disabled>
-                                                                <label class="form-check-label" for="ADMIN1"
-                                                                       align="left">Admin</label>
-                                                            </div>
-                                                            <div class="form-check form-switch" th:align="left">
-                                                                <input class="form-check-input" th:name="USER1"
-                                                                       value="USER1" th:type="checkbox"
-                                                                       id="USER1" disabled>
-                                                                <label class="form-check-label" for="USER1">User</label>
-                                                            </div>
                                                             <br/>
-                                                            <br/>
+                                                            <div class="form-check form-check-inline"
+                                                                 th:align="center">
+                                                                <input class="form-check-input"
+                                                                       th:id="1"
+                                                                       th:value="ROLE_ADMIN"
+                                                                       th:checked="${user.getRolesNames().contains('ADMIN')}"
+                                                                       th:type="checkbox"
+                                                                       id="del_ADMIN"
+                                                                       disabled>
+                                                                <label class="form-check-label"
+                                                                       for="del_ADMIN">Admin</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline"
+                                                                 th:align="center">
+                                                                <input class="form-check-input"
+                                                                       th:id="2"
+                                                                       th:value="ROLE_USER"
+                                                                       th:checked="${user.getRolesNames().contains('USER')}"
+                                                                       th:type="checkbox"
+                                                                       id="del_USER"
+                                                                       disabled>
+                                                                <label class="form-check-label mb-4"
+                                                                       for="del_USER">User</label>
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
+                                                            <button type="button"
+                                                                    class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">
                                                                 Close
                                                             </button>
-                                                            <button type="submit" class="btn btn-danger">
+                                                            <button type="submit"
+                                                                    class="btn btn-danger">
                                                                 Delete
                                                             </button>
                                                         </div>

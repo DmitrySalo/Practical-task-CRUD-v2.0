@@ -1,5 +1,6 @@
 package com.example.webappcrud.models;
 
+import com.example.webappcrud.config.SecurityConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,12 +27,13 @@ public class User implements UserDetails {
 
     @Column(name = "name")
     @NotBlank(message = "Name should not be empty!")
+    @Pattern(regexp="[\\p{Upper}{1}]+[\\p{Lower}]+|[А-ЯЁ{1}]+[а-яё]+", message = "Name must follow the pattern 'Name'!")
     @Size(min = 2, max = 30, message = "Name length should be between 2 and 30 characters!")
     private String name;
 
     @Column(name = "age")
     @Min(value = 0, message = "Age should be greater than 0!")
-    @Max(value = 125, message = "Age should not be greater than 100!")
+    @Max(value = 125, message = "Age should not be greater than 125!")
     private int age;
 
     @Column(name = "email", unique = true)
@@ -113,6 +115,7 @@ public class User implements UserDetails {
         if ((o == null) || (this.getClass() != o.getClass())) {
             return false;
         }
+
         User user = (User) o;
         return id == user.id
                 && age == user.age
