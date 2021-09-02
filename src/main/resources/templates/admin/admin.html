@@ -145,7 +145,6 @@
                                                                    placeholder="Age"
                                                                    th:name="age"
                                                                    th:value="${user.getAge()}"
-                                                                   th:field="*{age}"
                                                                    th:min="0" th:max="125"
                                                                    autofocus required/>
                                                             <div class="alert alert-warning"
@@ -164,7 +163,6 @@
                                                                    placeholder="Email"
                                                                    th:name="email"
                                                                    th:value="${user.getEmail()}"
-                                                                   th:field="*{email}"
                                                                    th:minlength="6" th:maxlength="46"
                                                                    autofocus required/>
                                                             <div class="alert alert-warning"
@@ -183,7 +181,6 @@
                                                                    placeholder="Login"
                                                                    th:name="login"
                                                                    th:value="${user.getLogin()}"
-                                                                   th:field="*{login}"
                                                                    th:minlength="4" th:maxlength="16"
                                                                    autofocus required/>
                                                             <div class="alert alert-warning"
@@ -202,7 +199,6 @@
                                                                    placeholder="Password"
                                                                    th:name="password"
                                                                    th:value="${user.getPassword()}"
-                                                                   th:field="*{password}"
                                                                    th:minlength="4" th:maxlength="80"
                                                                    autofocus required/>
                                                             <a href="#" class="password-control"></a>

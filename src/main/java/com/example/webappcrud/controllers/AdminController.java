@@ -4,32 +4,22 @@ import com.example.webappcrud.models.Role;
 import com.example.webappcrud.models.User;
 import com.example.webappcrud.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService service;
-
-    /*@Autowired
-    public AdminController(UserService service) {
-        this.service = service;
-    }*/
 
     @GetMapping
     public String adminPage(@AuthenticationPrincipal User user, Model model) {
@@ -60,8 +50,6 @@ public class AdminController {
     @PostMapping
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult,
-                         /*@RequestParam(value = "ADMIN", required = false) String ADMIN,
-                         @RequestParam(value = "USER", required = false) String USER*/
                          @RequestParam(required = false, name = "newRoles") String[] newRoles) {
 
         if (bindingResult.hasErrors()) {
@@ -69,30 +57,9 @@ public class AdminController {
         }
 
         setRoles(user, newRoles);
-        //setRolesIf(user, ADMIN, USER);
         service.createUser(user);
         return "redirect:/admin";
     }
-
-    /*private void setRolesIf(@ModelAttribute("user") @Valid User user,
-                            @RequestParam(value = "ADMIN", required = false) String ADMIN,
-                            @RequestParam(value = "USER", required = false) String USER) {
-        Set<Role> newRoles = new HashSet<>();
-
-        if (ADMIN != null) {
-            newRoles.add(new Role(1, ADMIN));
-        }
-
-        if (USER != null) {
-            newRoles.add(new Role(2, USER));
-        }
-
-        if ((ADMIN == null) && (USER == null)) {
-            newRoles.add(new Role(2, USER));
-        }
-
-        user.setRoles(newRoles);
-    }*/
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
@@ -103,8 +70,6 @@ public class AdminController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult,
-                         /*@RequestParam(name = "ADMIN", required = false) String ADMIN,
-                         @RequestParam(name = "USER", required = false) String USER*/
                          @RequestParam(required = false, name = "currentRoles") String[] currentRoles) {
 
         if (bindingResult.hasErrors()) {
@@ -112,8 +77,13 @@ public class AdminController {
         }
 
         setRoles(user, currentRoles);
-        //setRolesIf(user, ADMIN, USER);
         service.updateUser(user);
+        return "redirect:/admin";
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") int id) {
+        service.deleteUserById(id);
         return "redirect:/admin";
     }
 
@@ -131,11 +101,5 @@ public class AdminController {
         }
 
         user.setRoles(userRoles);
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        service.deleteUserById(id);
-        return "redirect:/admin";
     }
 }

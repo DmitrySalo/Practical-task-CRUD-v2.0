@@ -19,12 +19,7 @@ public class WebAppCrudApplication {
         SpringApplication.run(WebAppCrudApplication.class, args);
     }
 
-    /*@Bean
-    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
-        return new HiddenHttpMethodFilter();
-    }*/
-
-    /*@EventListener({ApplicationReadyEvent.class})
+    @EventListener({ApplicationReadyEvent.class})
     public void applicationReadyEvent() {
         log.info("Application was started... Launching browser page...");
         browse("http://localhost:8080/default/login");
@@ -48,5 +43,5 @@ public class WebAppCrudApplication {
                 e.printStackTrace();
             }
         }
-    }*/
+    }
 }

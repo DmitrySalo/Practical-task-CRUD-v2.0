@@ -1,6 +1,6 @@
 package com.example.webappcrud.service;
 
-import com.example.webappcrud.dao.UserRepository;
+import com.example.webappcrud.repositories.UserRepository;
 import com.example.webappcrud.models.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

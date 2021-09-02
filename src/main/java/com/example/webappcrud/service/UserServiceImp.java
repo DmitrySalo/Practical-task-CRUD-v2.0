@@ -1,12 +1,10 @@
 package com.example.webappcrud.service;
 
-import com.example.webappcrud.config.SecurityConfig;
-import com.example.webappcrud.dao.RoleRepository;
-import com.example.webappcrud.dao.UserRepository;
+import com.example.webappcrud.repositories.RoleRepository;
+import com.example.webappcrud.repositories.UserRepository;
 import com.example.webappcrud.models.Role;
 import com.example.webappcrud.models.User;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

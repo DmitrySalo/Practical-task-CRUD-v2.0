@@ -1,4 +1,4 @@
-package com.example.webappcrud.dao;
+package com.example.webappcrud.repositories;
 
 import com.example.webappcrud.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

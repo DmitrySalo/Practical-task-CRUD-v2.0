@@ -1,6 +1,5 @@
 package com.example.webappcrud.models;
 
-import com.example.webappcrud.config.SecurityConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

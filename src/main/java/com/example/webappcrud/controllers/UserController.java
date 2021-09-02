@@ -19,11 +19,6 @@ import java.util.Optional;
 public class UserController {
     private final UserDetailsService service;
 
-    /*@Autowired
-    public UserController(UserDetailsService service) {
-        this.service = service;
-    }*/
-
     @GetMapping
     public String getUserPage(@AuthenticationPrincipal User user, Model model) {
         Optional<UserDetails> userOptional =
