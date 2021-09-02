@@ -121,6 +121,7 @@
                                                                    placeholder="Name"
                                                                    th:name="name"
                                                                    th:value="${user.getName()}"
+                                                                   th:field="*{name}"
                                                                    th:minlength="2" th:maxlength="30"
                                                                    pattern="[\p{Upper}{1}]+[\p{Lower}]+|[А-ЯЁ{1}]+[а-яё]+"
                                                                    aria-describedby="nameHelpInline"
@@ -144,6 +145,7 @@
                                                                    placeholder="Age"
                                                                    th:name="age"
                                                                    th:value="${user.getAge()}"
+                                                                   th:field="*{age}"
                                                                    th:min="0" th:max="125"
                                                                    autofocus required/>
                                                             <div class="alert alert-warning"
@@ -162,6 +164,8 @@
                                                                    placeholder="Email"
                                                                    th:name="email"
                                                                    th:value="${user.getEmail()}"
+                                                                   th:field="*{email}"
+                                                                   th:minlength="6" th:maxlength="46"
                                                                    autofocus required/>
                                                             <div class="alert alert-warning"
                                                                  style="font-size: small"
@@ -179,6 +183,7 @@
                                                                    placeholder="Login"
                                                                    th:name="login"
                                                                    th:value="${user.getLogin()}"
+                                                                   th:field="*{login}"
                                                                    th:minlength="4" th:maxlength="16"
                                                                    autofocus required/>
                                                             <div class="alert alert-warning"
@@ -197,6 +202,7 @@
                                                                    placeholder="Password"
                                                                    th:name="password"
                                                                    th:value="${user.getPassword()}"
+                                                                   th:field="*{password}"
                                                                    th:minlength="4" th:maxlength="80"
                                                                    autofocus required/>
                                                             <a href="#" class="password-control"></a>
