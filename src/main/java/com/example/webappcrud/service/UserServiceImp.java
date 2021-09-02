@@ -68,9 +68,4 @@ public class UserServiceImp implements UserService {
     public void deleteUserById(int id) {
         userRepository.deleteById(id);
     }
-
-    @Override
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
-    }
 }

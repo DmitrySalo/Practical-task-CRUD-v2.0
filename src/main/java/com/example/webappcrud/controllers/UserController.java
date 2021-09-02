@@ -29,6 +29,6 @@ public class UserController {
             return "user/user";
         }
 
-        return "errors/not_found";
+        return "default/login";
     }
 }

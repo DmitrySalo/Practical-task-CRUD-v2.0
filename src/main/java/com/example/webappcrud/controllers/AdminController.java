@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -26,18 +25,6 @@ public class AdminController {
         model.addAttribute("users", service.getAllUsers());
         model.addAttribute("user", user);
         return "admin/admin";
-    }
-
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        Optional<User> userOptional = Optional.ofNullable((service.getUserById(id)));
-
-        if (userOptional.isPresent()) {
-            model.addAttribute("user", userOptional.get());
-            return "admin/show";
-        }
-
-        return "errors/not_found";
     }
 
     @GetMapping("/new")
@@ -61,10 +48,10 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/{id}")
     public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", service.getUserById(id));
-        return "admin/edit";
+        return "admin/admin";
     }
 
     @PatchMapping("/{id}")
